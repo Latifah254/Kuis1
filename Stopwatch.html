@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="Stopwatch.css">
+</head>
+<body>
+    <div class="stopwatch-container">
+        <div id="stopwatch"><span class="green">00</span>:<span class="yellow">00</span>:<span class="red">000</span></div>
+        <div class="buttons">
+            <button class="start">Start Timer</button>
+            <button class="stop">Stop Timer</button>
+            <button class="reset">Reset Timer</button>
+        </div>
+    </div>
+
+    <script>
+        const stopwatchDisplay = document.getElementById('stopwatch');
+        const startButton = document.querySelector('.start');
+        const stopButton = document.querySelector('.stop');
+        const resetButton = document.querySelector('.reset');
+
+        let intervalId;
+        let minutes = 0;
+        let seconds = 0;
+        let milliseconds = 0;
+
+        function updateDisplay() {
+            const displayMinutes = String(minutes).padStart(2, '0');
+            const displaySeconds = String(seconds).padStart(2, '0');
+            const displayMilliseconds = String(milliseconds).padStart(3, '0');
+
+            stopwatchDisplay.innerHTML = `<span class="green">${displayMinutes}</span>:<span class="yellow">${displaySeconds}</span>:<span class="red">${displayMilliseconds}</span>`;
+        }
+
+        function startTimer() {
+            if (!intervalId) {
+                intervalId = setInterval(() => {
+                    milliseconds += 10;
+                    if (milliseconds === 1000) {
+                        milliseconds = 0;
+                        seconds++;
+                        if (seconds === 60) {
+                            seconds = 0;
+                            minutes++;
+                        }
+                    }
+                    updateDisplay();
+                }, 10);
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+
+        function resetTimer() {
+            clearInterval(intervalId);
+            intervalId = null;
+            minutes = 0;
+            seconds = 0;
+            milliseconds = 0;
+            updateDisplay();
+        }
+
+        startButton.addEventListener('click', startTimer);
+        stopButton.addEventListener('click', stopTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+        // Inisialisasi tampilan awal
+        updateDisplay();
+    </script>
+</body>
+</html>
